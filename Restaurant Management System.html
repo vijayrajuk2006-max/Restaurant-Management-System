@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Management System</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f6f9;
+}
+
+header{
+background:#e67e22;
+color:white;
+padding:15px;
+text-align:center;
+}
+
+.container{
+width:90%;
+margin:auto;
+margin-top:20px;
+}
+
+.order-form{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+background:#27ae60;
+color:white;
+}
+
+button:hover{
+background:#219150;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+}
+
+table th,table td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+table th{
+background:#34495e;
+color:white;
+}
+
+.total{
+margin-top:20px;
+font-size:22px;
+font-weight:bold;
+text-align:right;
+}
+
+.delete-btn{
+background:red;
+}
+
+.delete-btn:hover{
+background:darkred;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🍽 Restaurant Management System</h1>
+</header>
+
+<div class="container">
+
+<div class="order-form">
+<h2>Add Order</h2>
+
+<select id="food">
+<option value="200">Biryani - ₹200</option>
+<option value="150">Pizza - ₹150</option>
+<option value="100">Burger - ₹100</option>
+<option value="80">Sandwich - ₹80</option>
+<option value="50">Coffee - ₹50</option>
+</select>
+
+<input type="number" id="qty" placeholder="Quantity" min="1">
+
+<button onclick="addOrder()">Add Order</button>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Food Item</th>
+<th>Price</th>
+<th>Quantity</th>
+<th>Total</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="orderTable"></tbody>
+</table>
+
+<div class="total">
+Grand Total: ₹<span id="grandTotal">0</span>
+</div>
+
+</div>
+
+<script>
+
+let grandTotal = 0;
+
+function addOrder(){
+
+let foodSelect=document.getElementById("food");
+let foodName=foodSelect.options[foodSelect.selectedIndex].text.split(" - ")[0];
+let price=parseInt(foodSelect.value);
+
+let qty=parseInt(document.getElementById("qty").value);
+
+if(!qty || qty<=0){
+alert("Enter valid quantity");
+return;
+}
+
+let total=price*qty;
+
+grandTotal+=total;
+
+let row=`
+<tr>
+<td>${foodName}</td>
+<td>₹${price}</td>
+<td>${qty}</td>
+<td>₹${total}</td>
+<td>
+<button class="delete-btn"
+onclick="deleteOrder(this,${total})">
+Delete
+</button>
+</td>
+</tr>
+`;
+
+document.getElementById("orderTable").innerHTML+=row;
+
+document.getElementById("grandTotal").innerText=grandTotal;
+
+document.getElementById("qty").value="";
+}
+
+function deleteOrder(btn,total){
+
+if(confirm("Delete this order?")){
+
+btn.parentElement.parentElement.remove();
+
+grandTotal-=total;
+
+document.getElementById("grandTotal").innerText=grandTotal;
+}
+}
+
+</script>
+
+</body>
+</html>
